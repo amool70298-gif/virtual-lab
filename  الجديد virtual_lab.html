@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>المختبر الافتراضي: الحية وغير الحية</title>
+<style>
+:root{
+  --bg:#eef6f3; --card:#ffffff; --text:#16332e; --sub:#4b6a63;
+  --accent:#0f9d78; --accent2:#2b7de9; --danger:#d9534f; --line:#dbe9e4;
+  --chip:#f4f8f6;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1a17; --card:#16241f; --text:#e7f3ee; --sub:#a9c4bb;
+    --accent:#33d19a; --accent2:#5b9bf5; --danger:#ff6b66; --line:#233a33; --chip:#1c2e28;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f1a17; --card:#16241f; --text:#e7f3ee; --sub:#a9c4bb;
+  --accent:#33d19a; --accent2:#5b9bf5; --danger:#ff6b66; --line:#233a33; --chip:#1c2e28;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:"Tahoma","Segoe UI",sans-serif;}
+body{padding:16px;max-width:760px;margin:0 auto;}
+h1{font-size:1.3rem;margin:6px 0 2px;color:var(--accent);}
+h2{font-size:1.05rem;margin:22px 0 8px;display:flex;align-items:center;gap:8px;}
+.badge{background:var(--accent);color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex:none;}
+p.lead{color:var(--sub);margin:4px 0 14px;font-size:.92rem;line-height:1.6;}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:14px;}
+textarea{width:100%;min-height:70px;border-radius:10px;border:1px solid var(--line);background:var(--chip);color:var(--text);padding:10px;font-family:inherit;font-size:.95rem;resize:vertical;}
+.field-scene{
+  position:relative;border-radius:14px;overflow:hidden;
+  background:linear-gradient(180deg,#bfe3c9 0%,#8fcf9d 55%,#7abf8c 100%);
+  min-height:340px;border:3px dashed #4b8f5e;
+}
+:root[data-theme="dark"] .field-scene, @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .field-scene{background:linear-gradient(180deg,#274f34 0%,#1e4029 55%,#183523 100%);border-color:#2f6b42;}}
+.item{
+  position:absolute;transform:translate(-50%,-50%);
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  cursor:pointer;user-select:none;touch-action:manipulation;
+}
+.item .emoji{font-size:2rem;filter:drop-shadow(0 2px 3px rgba(0,0,0,.25));transition:transform .15s;}
+.item.done .emoji{opacity:.55;}
+.item:active .emoji{transform:scale(1.15);}
+.item .lbl{font-size:.72rem;background:rgba(255,255,255,.85);color:#123;padding:1px 6px;border-radius:8px;white-space:nowrap;}
+.item.living.done .lbl{background:#2f9e6a;color:#fff;}
+.item.nonliving.done .lbl{background:#c0554f;color:#fff;}
+.popup{
+  position:absolute;bottom:8px;right:8px;left:8px;background:var(--card);
+  border:1px solid var(--line);border-radius:12px;padding:10px;display:none;
+  box-shadow:0 4px 14px rgba(0,0,0,.25);
+}
+.popup.show{display:block;}
+.popup .name{font-weight:bold;margin-bottom:8px;}
+.popup .btns{display:flex;gap:8px;}
+.popup button{flex:1;border:none;border-radius:8px;padding:10px;font-size:.9rem;color:#fff;cursor:pointer;}
+.btn-alive{background:var(--accent);}
+.btn-dead{background:var(--danger);}
+table{width:100%;border-collapse:collapse;margin-top:8px;}
+th,td{border:1px solid var(--line);padding:8px;text-align:center;font-size:.9rem;vertical-align:top;}
+th{background:var(--chip);}
+.counts{display:flex;gap:10px;margin-top:10px;font-size:.9rem;}
+.pill{background:var(--chip);border-radius:20px;padding:6px 12px;border:1px solid var(--line);}
+.reset{display:block;margin:10px auto 0;background:var(--accent2);color:#fff;border:none;border-radius:10px;padding:8px 16px;font-size:.85rem;cursor:pointer;}
+.saved{font-size:.75rem;color:var(--sub);margin-top:4px;}
+.hint-btn{display:inline-flex;align-items:center;gap:6px;margin-top:8px;background:none;border:1px dashed var(--accent2);color:var(--accent2);border-radius:8px;padding:6px 12px;font-size:.85rem;cursor:pointer;}
+.hint-box{display:none;margin-top:8px;background:var(--chip);border-right:3px solid var(--accent);border-radius:8px;padding:10px 12px;font-size:.88rem;line-height:1.7;color:var(--text);}
+.hint-box.show{display:block;}
+</style>
+</head>
+<body>
+
+<h1>🔬 المختبر الافتراضي</h1>
+<p class="lead">ما أوجه الاختلاف بين المخلوقات الحية والأشياء غير الحية؟ — نفّذ خطوات النشاط الاستقصائي بنفسك.</p>
+
+<div class="card">
+  <h2><span class="badge">1</span> أتوقّع</h2>
+  <p class="lead" style="margin-top:0">فيمَ تتشابه جميع المخلوقات الحية؟ وفيمَ تتشابه الأشياء غير الحية؟ اكتب توقعك:</p>
+  <textarea id="predict" placeholder="اكتب توقعك هنا..."></textarea>
+  <div class="saved" id="predictSaved"></div>
+  <button class="hint-btn" data-target="hintPredict">💡 إظهار إجابة نموذجية</button>
+  <div class="hint-box" id="hintPredict">أتوقع أن جميع المخلوقات الحية تتشابه في أنها تتنفس، وتتغذى، وتنمو، وتتكاثر، وتستجيب لما حولها، وتحتاج إلى الماء والغذاء والهواء للبقاء على قيد الحياة. أما الأشياء غير الحية فتتشابه في أنها لا تتنفس ولا تنمو ولا تتكاثر، وتبقى كما هي دون تغيير ذاتي ما لم تؤثر عليها عوامل خارجية.</div>
+</div>
+
+<div class="card">
+  <h2><span class="badge">2</span> المربّع الافتراضي في الحديقة</h2>
+  <p class="lead" style="margin-top:0">تخيّل أنك استخدمت الخيوط الأربعة لعمل مربّع في حديقة المدرسة. اضغط على كل عنصر داخل المربّع وصنّفه: هل هو كائن حي أم شيء غير حي؟</p>
+  <div class="field-scene" id="scene"></div>
+  <div class="counts">
+    <span class="pill">✅ مصنَّف: <span id="doneCount">0</span> / <span id="totalCount">0</span></span>
+  </div>
+  <button class="reset" id="resetBtn">إعادة الضبط 🔄</button>
+</div>
+
+<div class="card">
+  <h2><span class="badge">3</span> ألاحظ — جدول النتائج</h2>
+  <table>
+    <thead><tr><th>المخلوقات الحية</th><th>الأشياء غير الحية</th></tr></thead>
+    <tbody><tr><td id="colLiving" style="text-align:right"></td><td id="colNonLiving" style="text-align:right"></td></tr></tbody>
+  </table>
+</div>
+
+<div class="card">
+  <h2><span class="badge">4</span> أستخلص النتائج</h2>
+  <p class="lead" style="margin-top:0"><b>أفسّر البيانات:</b> ما الخصائص المشتركة بين المخلوقات الحية؟ وما الخصائص المشتركة بين الأشياء غير الحية؟</p>
+  <textarea id="q1" placeholder="اكتب إجابتك..."></textarea>
+  <button class="hint-btn" data-target="hintQ1">💡 إظهار إجابة نموذجية</button>
+  <div class="hint-box" id="hintQ1">الخصائص المشتركة بين المخلوقات الحية (مثل العشب، الفراشة، النملة، الزهرة، والعصفور) أنها جميعًا تتنفس، وتحتاج إلى الغذاء والماء، وتنمو، وتتكاثر، وتتحرك أو تستجيب للمؤثرات من حولها. أما الخصائص المشتركة بين الأشياء غير الحية (مثل الصخرة، وبركة الماء، والسياج المعدني، وكرة اللعب، وقطعة الخشب الجافة) فهي أنها لا تتنفس، ولا تحتاج إلى غذاء، ولا تنمو من تلقاء نفسها، ولا تتكاثر، وتبقى ثابتة بدون تغيير داخلي.</div>
+
+  <p class="lead"><b>أستنتج:</b> كيف تختلف المخلوقات الحية عن الأشياء غير الحية؟</p>
+  <textarea id="q2" placeholder="اكتب استنتاجك..."></textarea>
+  <button class="hint-btn" data-target="hintQ2">💡 إظهار إجابة نموذجية</button>
+  <div class="hint-box" id="hintQ2">تختلف المخلوقات الحية عن الأشياء غير الحية في أن المخلوقات الحية تولد وتنمو وتتكاثر وتموت، وتحتاج إلى الغذاء والماء والهواء لتعيش، وتستجيب للبيئة من حولها بحركة أو سلوك معين. أما الأشياء غير الحية فلا تملك أيًا من هذه الخصائص؛ فهي لا تنمو ولا تتكاثر ولا تحتاج إلى غذاء، ولا تتغير إلا بفعل عوامل خارجية مثل الرياح أو الماء أو الإنسان.</div>
+
+  <div class="saved" id="ansSaved"></div>
+</div>
+
+<script>
+const items = [
+  {name:"عشب أخضر", emoji:"🌿", type:"living", x:15, y:20},
+  {name:"فراشة", emoji:"🦋", type:"living", x:70, y:15},
+  {name:"نملة", emoji:"🐜", type:"living", x:40, y:55},
+  {name:"زهرة", emoji:"🌼", type:"living", x:85, y:60},
+  {name:"عصفور صغير", emoji:"🐦", type:"living", x:25, y:80},
+  {name:"صخرة", emoji:"🪨", type:"nonliving", x:55, y:30},
+  {name:"بركة ماء", emoji:"💧", type:"nonliving", x:10, y:65},
+  {name:"سياج معدني", emoji:"🔩", type:"nonliving", x:75, y:85},
+  {name:"لعبة كرة", emoji:"⚽", type:"nonliving", x:50, y:10},
+  {name:"قطعة خشب جافة", emoji:"🪵", type:"nonliving", x:90, y:35}
+];
+
+const scene = document.getElementById('scene');
+const colLiving = document.getElementById('colLiving');
+const colNonLiving = document.getElementById('colNonLiving');
+const doneCountEl = document.getElementById('doneCount');
+const totalCountEl = document.getElementById('totalCount');
+totalCountEl.textContent = items.length;
+
+let state = {};
+try{
+  const saved = localStorage.getItem('vlab_state');
+  if(saved) state = JSON.parse(saved);
+}catch(e){ state = {}; }
+
+function saveState(){
+  try{ localStorage.setItem('vlab_state', JSON.stringify(state)); }catch(e){}
+}
+
+function render(){
+  scene.innerHTML = '';
+  items.forEach((it, idx) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'item' + (state[idx] ? ' done ' + it.type : '');
+    wrap.style.left = it.x + '%';
+    wrap.style.top = it.y + '%';
+    wrap.innerHTML = `<div class="emoji">${it.emoji}</div><div class="lbl">${it.name}</div>`;
+    wrap.addEventListener('click', () => openPopup(idx, wrap));
+    scene.appendChild(wrap);
+  });
+  updateTable();
+}
+
+function openPopup(idx, wrap){
+  document.querySelectorAll('.popup').forEach(p => p.remove());
+  const it = items[idx];
+  const pop = document.createElement('div');
+  pop.className = 'popup show';
+  pop.innerHTML = `<div class="name">${it.emoji} ${it.name} — هل هو حي أم غير حي؟</div>
+    <div class="btns">
+      <button class="btn-alive">✅ حي</button>
+      <button class="btn-dead">❌ غير حي</button>
+    </div>`;
+  scene.appendChild(pop);
+  pop.querySelector('.btn-alive').onclick = () => classify(idx, 'living');
+  pop.querySelector('.btn-dead').onclick = () => classify(idx, 'nonliving');
+}
+
+function classify(idx, choice){
+  state[idx] = choice;
+  saveState();
+  document.querySelectorAll('.popup').forEach(p => p.remove());
+  render();
+}
+
+function updateTable(){
+  const living = [], nonliving = [];
+  items.forEach((it, idx) => {
+    if(state[idx] === 'living') living.push(it.emoji + ' ' + it.name);
+    else if(state[idx] === 'nonliving') nonliving.push(it.emoji + ' ' + it.name);
+  });
+  colLiving.innerHTML = living.map(t => `<div>${t}</div>`).join('') || '—';
+  colNonLiving.innerHTML = nonliving.map(t => `<div>${t}</div>`).join('') || '—';
+  doneCountEl.textContent = living.length + nonliving.length;
+}
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  state = {};
+  saveState();
+  render();
+});
+
+render();
+
+// Save free-text answers
+function bindText(id, key, savedEl){
+  const el = document.getElementById(id);
+  try{ const v = localStorage.getItem(key); if(v) el.value = v; }catch(e){}
+  el.addEventListener('input', () => {
+    try{
+      localStorage.setItem(key, el.value);
+      if(savedEl){ savedEl.textContent = 'تم الحفظ ✓'; setTimeout(()=>savedEl.textContent='', 1200); }
+    }catch(e){}
+  });
+}
+bindText('predict','vlab_predict', document.getElementById('predictSaved'));
+bindText('q1','vlab_q1', document.getElementById('ansSaved'));
+bindText('q2','vlab_q2', document.getElementById('ansSaved'));
+
+document.querySelectorAll('.hint-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const box = document.getElementById(btn.dataset.target);
+    box.classList.toggle('show');
+    btn.textContent = box.classList.contains('show') ? '🙈 إخفاء الإجابة النموذجية' : '💡 إظهار إجابة نموذجية';
+  });
+});
+</script>
+</body>
+</html>
