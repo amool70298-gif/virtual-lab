@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>مختبر افتراضي: ماذا يحدث لكيس البلاستيك؟</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#eaf3f8;--card:#fff;--ink:#17323f;--mute:#557383;--sky:#2b7ba5;--green:#7fae2f;--sun:#f2c12e;--line:#c9dce7;--water:#bfe3f3;--ok:#1f7a4a;--warn:#b4531a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1f28;--card:#172b36;--ink:#e6f1f6;--mute:#93b0bf;--line:#2c4655;--water:#2d6f8c;--sky:#5db4e0;--ok:#6fd39b;--warn:#f0a066}}
+:root[data-theme="dark"]{--bg:#0f1f28;--card:#172b36;--ink:#e6f1f6;--mute:#93b0bf;--line:#2c4655;--water:#2d6f8c;--sky:#5db4e0;--ok:#6fd39b;--warn:#f0a066}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Tajawal',Tahoma,'Segoe UI',sans-serif;line-height:1.75;font-size:16px}
+main{max-width:720px;margin:0 auto;padding:14px}
+header{background:var(--sky);color:#fff;border-radius:14px 14px 14px 0;padding:14px 16px;border-inline-start:8px solid var(--sun)}
+header small{opacity:.9}
+header h1{margin:2px 0 0;font-size:20px;font-weight:800}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-top:14px;padding:14px}
+h2{margin:0 0 6px;font-size:17px;font-weight:800;display:flex;gap:8px;align-items:center}
+h2 b{background:var(--sky);color:#fff;border-radius:50%;width:26px;height:26px;display:inline-grid;place-items:center;font-size:14px;flex:none}
+h2 em{font-style:normal;color:var(--warn)}
+p{margin:4px 0}
+.tray{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.chip{border:2px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:6px 10px;font:inherit;cursor:pointer;display:flex;gap:6px;align-items:center;min-height:44px}
+.chip i{width:18px;height:18px;border-radius:4px;display:inline-block;border:1px solid rgba(0,0,0,.25)}
+.chip[aria-pressed=true]{border-color:var(--sky);background:var(--sky);color:#fff}
+.tag{font-size:13px;color:var(--mute);margin-top:6px}
+svg{width:100%;height:auto;display:block}
+.cup{cursor:pointer}
+.cup:focus-visible,.chip:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+button.b{border:0;background:var(--green);color:#0d2200;font:inherit;font-weight:700;border-radius:10px;padding:8px 14px;cursor:pointer;min-height:44px}
+button.b.g{background:var(--line);color:var(--ink)}
+input[type=range]{flex:1;min-width:140px;accent-color:var(--sky);height:32px}
+table{width:100%;border-collapse:collapse;margin-top:8px;font-size:15px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:right;vertical-align:top}
+th{background:var(--bg)}
+.note{background:var(--bg);border-inline-start:5px solid var(--green);border-radius:8px;padding:8px 10px;margin-top:8px}
+.ans{color:var(--ok);font-weight:700}
+details{border:1px solid var(--line);border-radius:10px;margin-top:8px;padding:6px 10px}
+summary{cursor:pointer;font-weight:700;min-height:32px}
+.drop{animation:fall 1s linear infinite}
+@keyframes fall{from{transform:translateY(-20px)}to{transform:translateY(90px)}}
+.rain .tis{transform:scale(1.7,.25);opacity:.25}
+.tis{transition:transform 4s ease,opacity 4s ease;transform-box:fill-box;transform-origin:center bottom}
+.pla{transition:transform 4s ease;transform-box:fill-box}
+.rain .pla{transform:translateX(-14px)}
+#drops{display:none}.rain #drops{display:block}
+@media (prefers-reduced-motion:reduce){.drop{animation:none}.tis,.pla{transition:none}}
+</style>
+</head>
+<body>
+<main>
+<header><small>أستكشف · نشاط استقصائي</small><h1>ماذا يحدث لكيس البلاستيك إذا ألقينا به في الشارع؟</h1></header>
+
+<section>
+<h2><b>١</b>أجهّز التجربة</h2>
+<p>اختر مادة من «أحتاج إلى» ثم اضغط على الكأس لوضعها فيه. كل كأس فيه ماء.</p>
+<div class="tag">أحتاج إلى:</div>
+<div class="tray" id="tray1"></div>
+<div class="tag">أستكشف أكثر (الخطوة ٤): جرّب مواد أخرى</div>
+<div class="tray" id="tray2"></div>
+<svg id="lab" viewBox="0 0 340 250" role="img" aria-label="كأسان فيهما ماء"></svg>
+<div class="row"><button class="b g" id="reset">إعادة التجربة</button><span id="hint" class="tag"></span></div>
+</section>
+
+<section>
+<h2><b>٢</b>ألاحظ <em>ماذا حدث بعد ليلة كاملة؟</em></h2>
+<div class="row">
+<button class="b" id="night">اترك الكأسين ليلة كاملة</button>
+<input type="range" id="t" min="0" max="12" step="0.1" value="0" aria-label="الزمن بالساعات">
+<span id="tl" class="tag" aria-live="polite"></span>
+</div>
+<div id="obs" class="note">ضع مادة في كل كأس ثم حرّك الزمن لترى النتيجة.</div>
+</section>
+
+<section>
+<h2><b>٣</b>أستنتج <em>في يوم مطير</em></h2>
+<p>ماذا يحدث لكل من ورقة التنشيف وقطعة البلاستيك إذا وُضعتا على الأرض خارج المنزل في يوم مطير؟</p>
+<svg id="rainsvg" viewBox="0 0 340 150" role="img" aria-label="ورقة تنشيف وقطعة بلاستيك على الأرض في المطر">
+<rect width="340" height="150" fill="var(--bg)"/>
+<rect y="112" width="340" height="38" fill="#8a7a66"/>
+<g id="drops" stroke="var(--sky)" stroke-width="2" stroke-linecap="round">
+<g class="drop"><path d="M40 0v10"/><path d="M110 -30v10"/><path d="M180 -10v10"/><path d="M250 -40v10"/><path d="M310 -5v10"/></g>
+<g class="drop" style="animation-delay:.4s"><path d="M75 -20v10"/><path d="M145 -50v10"/><path d="M215 -30v10"/><path d="M280 -15v10"/></g>
+</g>
+<path class="tis" d="M55 112l10-20 18 4 14-6 14 8 4 14z" fill="#f4f4ef" stroke="#b9b9ae"/>
+<path class="pla" d="M215 112l8-18 20 5 22-5 6 18z" fill="#3f83d8" fill-opacity=".8" stroke="#245aa0"/>
+<text x="90" y="140" text-anchor="middle" font-size="13" fill="#fff">ورقة التنشيف</text>
+<text x="250" y="140" text-anchor="middle" font-size="13" fill="#fff">قطعة البلاستيك</text>
+</svg>
+<div class="row"><button class="b" id="rain">دع المطر يهطل</button><button class="b g" id="dry">أوقف المطر</button></div>
+<div class="note" id="rainans">اضغط «دع المطر يهطل» لترى ما يحدث.</div>
+</section>
+
+<section>
+<h2><b>٤</b>أستقصي <em>أعيد النشاط بمواد أخرى</em></h2>
+<p>ارجع إلى الخطوة ١ وجرّب الورق المقوّى، ورق الألمنيوم، ورقة الشجر، والقماش. سجّل نتائجك هنا تلقائياً:</p>
+<table><thead><tr><th>المادة</th><th>بعد ليلة كاملة</th><th>تتحلل؟</th></tr></thead><tbody id="log"><tr><td colspan="3" class="tag">لا توجد نتائج بعد.</td></tr></tbody></table>
+</section>
+
+<section>
+<h2>الإجابات النموذجية</h2>
+<details><summary>ألاحظ: ماذا حدث لكل من ورقة التنشيف وقطعة البلاستيك؟</summary>
+<p class="ans">ورقة التنشيف امتصت الماء وتفككت وتمزقت إلى قطع صغيرة وأصبح الماء عكراً. أما قطعة البلاستيك فبقيت كما هي دون تغيّر.</p></details>
+<details><summary>أستنتج: ماذا يحدث لكل منهما في يوم مطير؟</summary>
+<p class="ans">ورقة التنشيف تتبلل وتتفكك وتتحلل مع الوقت. أما البلاستيك فلا يتأثر بماء المطر، ويبقى سليماً، وقد يجرفه الماء إلى المصارف أو الأودية فيلوّث البيئة.</p></details>
+<details><summary>أستقصي: نتائج المواد الأخرى</summary>
+<p class="ans">الورق المقوّى: يلين ويتفكك جزئياً. ورقة الشجر: تتغير ببطء وتتحلل خلال أسابيع. القماش القطني: يتبلل ويتحلل ببطء شديد. ورق الألمنيوم والبلاستيك: لا يتغيران.</p></details>
+<details><summary>الخلاصة</summary>
+<p class="ans">المواد الطبيعية مثل الورق وأوراق الشجر تتحلل مع الزمن، أما البلاستيك والألمنيوم فتبقى طويلاً جداً في البيئة. لذلك من الأفضل إعادة استخدامها بدل رميها في الشارع.</p></details>
+</section>
+</main>
+
+<script>
+const M=[
+{id:'tis',n:'ورقة تنشيف',c:'#f4f4ef',d:1,o:'امتصت الماء وتفككت وتمزقت إلى قطع صغيرة وأصبح الماء عكراً.',y:'نعم، بسرعة'},
+{id:'pla',n:'كيس بلاستيكي',c:'#3f83d8',d:0,o:'بقيت كما هي، لم تتغير ولم تمتص الماء.',y:'لا'},
+{id:'car',n:'ورق مقوّى',c:'#b58b5a',d:.55,o:'لان وامتص الماء وتفكك جزئياً.',y:'نعم، ببطء'},
+{id:'foi',n:'ورق ألمنيوم',c:'#c9ced3',d:0,o:'بقي كما هو دون تغيّر.',y:'لا'},
+{id:'lea',n:'ورقة شجر',c:'#4f9a3a',d:.2,o:'تغيّر لونها قليلاً، وتتحلل كلياً بعد أسابيع.',y:'نعم، ببطء شديد'},
+{id:'clo',n:'قماش قطني',c:'#e2a0b4',d:.12,o:'تبلل تماماً لكنه لم يتفكك في ليلة واحدة.',y:'نعم، ببطء شديد'}];
+const P=[[-14,-8,22,16,-10],[6,-9,22,16,8],[-8,4,24,16,5],[12,5,20,15,-6],[-20,6,14,12,15],[0,-2,20,14,0]];
+const cups=[null,null],log={};let sel=null,cur=0;
+const $=id=>document.getElementById(id),ar=n=>Number(n).toLocaleString('ar-EG',{maximumFractionDigits:0});
+function chips(){[['tray1',0,2],['tray2',2,6]].forEach(([t,a,b])=>{$(t).innerHTML=M.slice(a,b).map(m=>`<button class="chip" data-id="${m.id}" aria-pressed="${sel===m.id}"><i style="background:${m.c}"></i>${m.n}</button>`).join('')})}
+function draw(){
+const tt=+$('t').value/12;
+let s='<rect x="0" y="212" width="340" height="38" fill="#a98b66"/><rect x="0" y="208" width="340" height="6" fill="#c7a97f"/>';
+[90,250].forEach((c,i)=>{const m=cups[i];const d=m?tt*m.d:0;
+s+=`<g class="cup" data-cup="${i}" tabindex="0" role="button" aria-label="كأس ${i+1}${m?': '+m.n:''}" transform="translate(${c} 0)">
+<polygon points="-41,88 41,88 30,200 -30,200" fill="var(--water)"/>
+<polygon points="-41,88 41,88 30,200 -30,200" fill="#8a7a55" opacity="${(d*.55).toFixed(2)}"/>`;
+if(m){P.forEach(([x,y,w,h,r],k)=>{const sp=1+d*.9,sc=1-d*.5,yy=145+y*(1+d*.5)+d*(30+k*2);
+s+=`<rect x="${(x*sp-w*sc/2).toFixed(1)}" y="${(yy-h*sc/2).toFixed(1)}" width="${(w*sc).toFixed(1)}" height="${(h*sc).toFixed(1)}" rx="3" fill="${m.c}" fill-opacity="${m.id=='pla'?.8:(1-d*.45).toFixed(2)}" stroke="rgba(0,0,0,.25)" transform="rotate(${r+d*40*(k%2?1:-1)} ${x*sp} ${yy})"/>`});}
+else s+='<text y="150" text-anchor="middle" font-size="26" fill="var(--mute)">＋</text>';
+s+=`<path d="M-45 60L-30 200H30L45 60" fill="none" stroke="var(--mute)" stroke-width="3" stroke-linejoin="round"/><line x1="-47" y1="60" x2="47" y2="60" stroke="var(--mute)" stroke-width="3"/>
+<text y="235" text-anchor="middle" font-size="15" fill="#fff">${m?m.n:'كأس '+ar(i+1)}</text></g>`});
+if(tt>0)s+='<text x="170" y="34" text-anchor="middle" font-size="22">🌙</text>';
+$('lab').innerHTML=s;
+$('tl').textContent='بعد '+ar(Math.round(tt*12))+' ساعة';
+report(tt);}
+function report(tt){
+const a=cups[0],b=cups[1];
+$('hint').textContent=(!a||!b)?'اختر مادة ثم اضغط الكأس.':'';
+if(!a||!b){$('obs').textContent='ضع مادة في كل كأس ثم حرّك الزمن لترى النتيجة.';return}
+if(tt<.99){$('obs').textContent='حرّك الزمن أو اضغط «اترك الكأسين ليلة كاملة» لترى ما يحدث.';return}
+const dif=Math.abs(a.d-b.d)>.3;
+$('obs').innerHTML=`<b>${a.n}:</b> ${a.o}<br><b>${b.n}:</b> ${b.o}<br><span class="ans">${dif?'الاستنتاج: بعض المواد تتأثر بالماء وتتحلل، وبعضها لا يتأثر.':'الاستنتاج: للمادتين سلوك متقارب مع الماء.'}</span>`;
+[a,b].forEach(m=>log[m.id]=m);
+$('log').innerHTML=Object.values(log).map(m=>`<tr><td>${m.n}</td><td>${m.o}</td><td>${m.y}</td></tr>`).join('');}
+function place(i){if(!sel)return $('hint').textContent='اختر مادة أولاً.';cups[i]=M.find(m=>m.id===sel);draw()}
+document.addEventListener('click',e=>{
+const c=e.target.closest('.chip');if(c){sel=c.dataset.id;chips();return}
+const u=e.target.closest('.cup');if(u)place(+u.dataset.cup)});
+$('lab').addEventListener('keydown',e=>{const u=e.target.closest('.cup');if(u&&(e.key=='Enter'||e.key==' ')){e.preventDefault();place(+u.dataset.cup)}});
+$('t').oninput=draw;
+$('night').onclick=()=>{if(!cups[0]||!cups[1]){$('hint').textContent='ضع مادة في كل كأس أولاً.';return}
+let v=+$('t').value;if(v>=12)v=0;const go=()=>{v=Math.min(12,v+.25);$('t').value=v;draw();if(v<12)requestAnimationFrame(()=>setTimeout(go,30))};go()};
+$('reset').onclick=()=>{cups[0]=cups[1]=null;sel=null;$('t').value=0;chips();draw()};
+$('rain').onclick=()=>{$('rainsvg').classList.add('rain');$('rainans').innerHTML='<span class="ans">ورقة التنشيف تتبلل وتتفكك وتتحلل. أما قطعة البلاستيك فتبقى سليمة، وقد يجرفها ماء المطر إلى المصارف والأودية.</span>'};
+$('dry').onclick=()=>{$('rainsvg').classList.remove('rain');$('rainans').textContent='اضغط «دع المطر يهطل» لترى ما يحدث.'};
+chips();draw();
+</script>
+</body>
+</html>
